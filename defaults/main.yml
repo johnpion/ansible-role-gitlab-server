@@ -1,0 +1,3 @@
+# workarround
+ldap_enabled: false
+gitlab_nginx: true

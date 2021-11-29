@@ -1,0 +1,17 @@
+- stat:
+    path: /usr/bin/gitlab-ctl
+  register: gitlab_in_system
+
+- include: install.yml
+  when: gitlab_in_system.stat.exists == false
+  
+- name: configure
+  template:
+    backup: true
+    src: gitlab.rb.j2
+    dest: /etc/gitlab/gitlab.rb
+  register: gitlab_configure
+
+- name: gitlab-ctl reconfigure
+  shell: gitlab-ctl reconfigure
+  when: gitlab_configure.changed
