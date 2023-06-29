@@ -1,17 +1,18 @@
-- stat:
+- name: Check if gitlab is installed
+  ansible.builtin.stat:
     path: /usr/bin/gitlab-ctl
   register: gitlab_in_system
 
-- include: install.yml
-  when: gitlab_in_system.stat.exists == false
-  
-- name: configure
-  template:
+- name: Stage Install
+  ansible.builtin.include_tasks: install.yml
+  when: not (gitlab_in_system.stat.exists|bool)
+
+- name: Stage Configuration
+  ansible.builtin.template:
     backup: true
     src: gitlab.rb.j2
     dest: /etc/gitlab/gitlab.rb
-  register: gitlab_configure
-
-- name: gitlab-ctl reconfigure
-  shell: gitlab-ctl reconfigure
-  when: gitlab_configure.changed
+    owner: root
+    group: root
+    mode: "0640"
+  notify: Reconfigure gitlab

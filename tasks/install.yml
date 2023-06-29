@@ -1,14 +1,17 @@
-- name: download script
-  get_url:
+- name: Download installation script from the official webpage
+  ansible.builtin.get_url:
     url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
     dest: /tmp/script.deb.sh
-    mode: 0755
+    owner: root
+    group: root
+    mode: "0750"
   register: gitlab_script
 
-- name: add apt repo
-  shell: /tmp/script.deb.sh
-  when: gitlab_script.changed == True
+- name: Add apt repo
+  ansible.builtin.shell: /tmp/script.deb.sh
+  warn: false  # E301
+  when: gitlab_script.changed|bool
 
-- name: install gitlab
-  apt:
+- name: Install gitlab from apt
+  ansible.builtin.apt:
     pkg: gitlab-ce
