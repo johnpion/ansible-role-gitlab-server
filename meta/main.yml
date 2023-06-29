@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Ivan Serohin
+  license: license Apache-2.0
+  role_name: gitlab_server
+  namespace: johnpion
+  description: ansible role 'Gitlab Server' for installation Gitlab CE from the official webpage
+  min_ansible_version: '2.14'
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
