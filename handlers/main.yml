@@ -1,3 +1,6 @@
 - name: Reconfigure gitlab
-  ansible.builtin.shell: gitlab-ctl reconfigure
-  warn: false  # E301
+  ansible.builtin.command:
+    cmd: gitlab-ctl reconfigure
+  register: result
+  changed_when: result.rc == 0
+  tags: skip_ansible_lint
